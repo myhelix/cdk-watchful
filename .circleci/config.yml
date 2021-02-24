@@ -1,0 +1,35 @@
+version: 2.1
+
+orbs:
+  cdk: helix/cdk@dev:7817f08 #0.5.0
+
+workflows:
+  build:
+    jobs:
+
+      - cdk/install:
+          name: "Install NPM packages for cdk"
+          context: npm-readonly
+
+      - cdk/test:
+          name: "Test"
+          requires:
+            - "Install NPM packages for cdk"
+
+      - cdk/lint:
+          name: "Lint"
+          requires:
+            - "Install NPM packages for cdk"
+
+      - cdk/build:
+          name: "Build"
+          requires:
+            - "Install NPM packages for cdk"
+
+      - cdk/publish:
+          name: "Publish cdk-watchful"
+          requires:
+            - cdk/test
+            - cdk/lint
+            - cdk/build
+          context: npm-publish

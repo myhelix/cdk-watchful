@@ -1,22 +1,17 @@
 const { ConstructLibraryAws, Semver } = require('projen');
 
 const project = new ConstructLibraryAws({
-  name: 'cdk-watchful',
-  description: 'Watching your CDK apps since 2019',
+  name: '@myhelix/cdk-watchful',
+  description: 'Forked from https://github.com/eladb/cdk-watchful',
   defaultReleaseBranch: 'main',
 
-
-  authorName: 'Elad Ben-Israel',
-  authorEmail: 'elad.benisrael@gmail.com',
-  repository: 'https://github.com/eladb/cdk-watchful.git',
+  authorName: 'Helix Devops',
+  authorEmail: '',
+  repository: 'https://github.com/myhelix/cdk-watchful.git',
   keywords: [
     'cloudwatch',
     'monitoring',
   ],
-
-  catalog: {
-    twitter: 'emeshbi',
-  },
 
   // creates PRs for projen upgrades
   projenUpgradeSecret: 'PROJEN_GITHUB_TOKEN',
@@ -44,19 +39,10 @@ const project = new ConstructLibraryAws({
     'aws-sdk',
   ],
 
-  // jsii publishing
-
-  publishToMaven: {
-    javaPackage: 'com.github.eladb.watchful',
-    mavenGroupId: 'com.github.eladb',
-    mavenArtifactId: 'cdk-watchful',
-  },
-
-  publishToPypi: {
-    distName: 'cdk-watchful',
-    module: 'cdk_watchful',
-  },
 });
+
+// to support the Helix CircleCI Orb
+project.setScript('lint', 'npx projen eslint');
 
 project.gitignore.exclude('.env', '.idea');
 project.gitignore.exclude('example/*.js', 'example/*.d.ts');
