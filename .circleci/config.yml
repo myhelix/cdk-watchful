@@ -29,7 +29,7 @@ workflows:
       - cdk/publish:
           name: "Publish cdk-watchful"
           requires:
-            - cdk/test
-            - cdk/lint
-            - cdk/build
+            - Test
+            - Lint
+            - Build
           context: npm-publish
