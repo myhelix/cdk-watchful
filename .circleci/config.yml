@@ -1,12 +1,37 @@
 version: 2.1
 
 orbs:
-  cdk: helix/cdk@dev:e52ed15 #0.5.0
+  cdk: helix/cdk@4.0.0
+
+executors:
+  node:
+    docker:
+      - image: cimg/node:15.10.0
+
+jobs:
+  publish:
+    executor: node
+    steps:
+      - run:
+          name: Publish Canary if applicable
+          command: |
+            if [[ $CIRCLE_BRANCH =~ ^dev-.* ]]; then
+              npm whoami
+              npm version --no-git-tag-version prerelease --preid=dev  
+              npm publish
+            fi
+      - when:
+          condition:
+            or:
+              - equal: ["main", << pipeline.git.branch >>]
+          steps:
+            - run:
+                name: npm publish
+                command: npm publish
 
 workflows:
   build:
     jobs:
-
       - cdk/install:
           name: "Install NPM packages for cdk"
           context: npm-readonly
@@ -26,25 +51,10 @@ workflows:
           requires:
             - "Install NPM packages for cdk"
 
-      - cdk/publish:
-          name: "Publish release of cdk-watchful"
+      - publish:
+          name: "Publish cdk-watchful"
           requires:
             - Test
             - Lint
             - Build
           context: npm-publish
-          filters:
-            branches:
-              only: main
-
-      - cdk/publish:
-          name: "Publish canary build of cdk-watchful"
-          npm_params: --tag canary
-          requires:
-            - Test
-            - Lint
-            - Build
-          context: npm-publish
-          filters:
-            branches:
-              ignore: main
