@@ -13,6 +13,9 @@ jobs:
     executor: node
     steps:
       - run:
+          name: Authenticate with registry
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > $HOME/.npmrc
+      - run:
           name: Publish Canary if applicable
           command: |
             if [[ $CIRCLE_BRANCH =~ ^dev-.* ]]; then
@@ -28,6 +31,9 @@ jobs:
             - run:
                 name: npm publish
                 command: npm publish
+      - run:
+          name: Clean up credentials.
+          command: rm -f $HOME/.npmrc
 
 workflows:
   build:
