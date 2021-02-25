@@ -5,8 +5,10 @@ const project = new ConstructLibraryAws({
   description: 'Forked from https://github.com/eladb/cdk-watchful',
   defaultReleaseBranch: 'main',
 
+  buildWorkflow: 'false',
+
   authorName: 'Helix Devops',
-  authorEmail: '',
+  authorEmail: 'ops@helix.com',
   repository: 'https://github.com/myhelix/cdk-watchful.git',
   keywords: [
     'cloudwatch',
