@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  cdk: helix/cdk@dev:2eca9b7 #0.5.0
+  cdk: helix/cdk@dev:alpha #0.5.0
 
 workflows:
   build:
@@ -27,9 +27,25 @@ workflows:
             - "Install NPM packages for cdk"
 
       - cdk/publish:
-          name: "Publish cdk-watchful"
+          name: "Publish release of cdk-watchful"
           requires:
             - Test
             - Lint
             - Build
           context: npm-publish
+          filters:
+            branches:
+              only: main
+
+      - cdk/publish:
+          name: "Publish dev build of cdk-watchful"
+          npm_params: --tag -dev
+          requires:
+            - Test
+            - Lint
+            - Build
+          context: npm-publish
+          filters:
+            branches:
+              ignore: 
+                - main
