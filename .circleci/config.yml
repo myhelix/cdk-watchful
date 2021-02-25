@@ -38,8 +38,8 @@ workflows:
               only: main
 
       - cdk/publish:
-          name: "Publish dev build of cdk-watchful"
-          npm_params: --tag dev
+          name: "Publish canary build of cdk-watchful"
+          npm_params: --tag canary
           requires:
             - Test
             - Lint
