@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  cdk: helix/cdk@4.0.0
+  cdk: myhelix/cdk@4.0.0
 
 executors:
   node:
