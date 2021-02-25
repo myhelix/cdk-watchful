@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  cdk: helix/cdk@dev:alpha #0.5.0
+  cdk: helix/cdk@dev:e52ed15 #0.5.0
 
 workflows:
   build:
