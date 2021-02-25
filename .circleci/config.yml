@@ -47,5 +47,4 @@ workflows:
           context: npm-publish
           filters:
             branches:
-              ignore: 
-                - main
+              ignore: main
