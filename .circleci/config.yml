@@ -21,8 +21,8 @@ jobs:
           command: |
             if [[ $CIRCLE_BRANCH =~ ^dev-.* ]]; then
               npm whoami
-              npm version --no-git-tag-version prerelease --preid=dev-$CIRCLE_SHA1 --tag canary
-              npm publish
+              npm version --no-git-tag-version prerelease --preid=dev-$CIRCLE_WORKFLOW_ID
+              npm publish --tag canary 
             fi
       - when:
           condition:
