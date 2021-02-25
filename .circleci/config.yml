@@ -17,7 +17,7 @@ jobs:
           name: Authenticate with registry
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > $HOME/.npmrc
       - run:
-          name: Publish Canary if applicable
+          name: Publish Canary if dev- branch
           command: |
             if [[ $CIRCLE_BRANCH =~ ^dev-.* ]]; then
               npm whoami
