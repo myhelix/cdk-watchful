@@ -44,7 +44,7 @@ const project = new AwsCdkConstructLibrary({
     'aws-sdk',
   ],
 
-/*  npmAccess: NpmAccess.RESTRICTED,*/
+  npmAccess: NpmAccess.RESTRICTED,
 
 });
 
