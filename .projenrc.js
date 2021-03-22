@@ -14,10 +14,6 @@ const project = new AwsCdkConstructLibrary({
     'monitoring',
   ],
 
-  catalog: {
-    twitter: 'emeshbi',
-  },
-
   // creates PRs for projen upgrades
   projenUpgradeSecret: 'PROJEN_GITHUB_TOKEN',
 
@@ -44,18 +40,8 @@ const project = new AwsCdkConstructLibrary({
     'aws-sdk',
   ],
 
-  publishToMaven: {
-    javaPackage: 'com.github.eladb.watchful',
-    mavenGroupId: 'com.github.eladb',
-    mavenArtifactId: 'cdk-watchful',
-  },
-
-  publishToPypi: {
-    distName: 'cdk-watchful',
-    module: 'cdk_watchful',
-  },
-  npmAccess: NpmAccess.RESTRICTED,
-
+  // disable until we cut over publishing
+  antitamper: false
 });
 
 project.gitignore.exclude('.env', '.idea');
