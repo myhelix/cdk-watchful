@@ -1,4 +1,4 @@
-const { AwsCdkConstructLibrary, NpmAccess } = require('projen');
+const { AwsCdkConstructLibrary } = require('projen');
 
 const project = new AwsCdkConstructLibrary({
   name: '@myhelix/cdk-watchful',
@@ -41,7 +41,7 @@ const project = new AwsCdkConstructLibrary({
   ],
 
   // disable until we cut over publishing
-  antitamper: false,
+  // antitamper: false,
   // minNodeVersion: '14.0.0',
 });
 
