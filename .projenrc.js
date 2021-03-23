@@ -41,7 +41,8 @@ const project = new AwsCdkConstructLibrary({
   ],
 
   // disable until we cut over publishing
-  antitamper: false
+  antitamper: false,
+  minNodeVersion: '14.0.0',
 });
 
 project.gitignore.exclude('.env', '.idea');
