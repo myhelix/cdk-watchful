@@ -68,7 +68,7 @@
           "spawn": "test:compile"
         },
         {
-          "exec": "jest --passWithNoTests --all --coverageProvider=v8"
+          "exec": "jest --passWithNoTests --all"
         },
         {
           "spawn": "eslint"
