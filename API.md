@@ -663,6 +663,7 @@ Name | Type | Description
 
 
 
+
 ## struct WatchFirehoseServiceOptions  <a id="myhelix-cdk-watchful-watchfirehoseserviceoptions"></a>
 
 
