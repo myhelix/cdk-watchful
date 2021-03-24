@@ -454,7 +454,7 @@
     "@aws-cdk/core" "1.94.1"
     constructs "^3.2.0"
 
-"@aws-cdk/aws-kinesisfirehose@1.94.1":
+"@aws-cdk/aws-kinesisfirehose@1.94.1", "@aws-cdk/aws-kinesisfirehose@^1.94.1":
   version "1.94.1"
   resolved "https://registry.yarnpkg.com/@aws-cdk/aws-kinesisfirehose/-/aws-kinesisfirehose-1.94.1.tgz#55fb1fcc73ac2621b52300506f6d2ecc0debbfc6"
   integrity sha512-IoJ6dxjJixMrnQyee1yiZ05J0TjoHnHvBNdMIawkxKGdl/uUTN8y0lvW1zV+8FqFbjuEi3Tp1FYiCk6KjHkWEA==
