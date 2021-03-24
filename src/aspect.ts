@@ -1,7 +1,7 @@
 import * as apigw from '@aws-cdk/aws-apigateway';
 import * as dynamodb from '@aws-cdk/aws-dynamodb';
-import * as firehose from '@aws-cdk/aws-kinesisfirehose';
 import * as ecs_patterns from '@aws-cdk/aws-ecs-patterns';
+import * as firehose from '@aws-cdk/aws-kinesisfirehose';
 import * as lambda from '@aws-cdk/aws-lambda';
 import * as rds from '@aws-cdk/aws-rds';
 import { IAspect, IConstruct } from '@aws-cdk/core';

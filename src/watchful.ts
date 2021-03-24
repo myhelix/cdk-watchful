@@ -108,11 +108,11 @@ export class Watchful extends Construct implements IWatchful {
     });
   }
 
-  public watchFirehose(title: string, firehose: firehose.CfnDeliveryStream, options: WatchFirehoseServiceOptions = {}) {
-    return new WatchFirehoseService(this, firehose.node.addr, {
+  public watchFirehose(title: string, fh: firehose.CfnDeliveryStream, options: WatchFirehoseServiceOptions = {}) {
+    return new WatchFirehoseService(this, fh.node.addr, {
       title,
       watchful: this,
-      firehose,
+      fh,
       ...options,
     });
   }

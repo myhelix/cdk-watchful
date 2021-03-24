@@ -1,9 +1,7 @@
-import * as cdk from '@aws-cdk/core';
 import * as cloudwatch from '@aws-cdk/aws-cloudwatch';
 import * as firehose from '@aws-cdk/aws-kinesisfirehose';
+import * as cdk from '@aws-cdk/core';
 import { IWatchful } from './api';
-import { Metric } from '@aws-cdk/aws-cloudwatch';
-import { Duration } from '@aws-cdk/core';
 
 export interface WatchFirehoseServiceOptions {
 }
@@ -11,21 +9,21 @@ export interface WatchFirehoseServiceOptions {
 export interface WatchFirehoseServiceProps extends WatchFirehoseServiceOptions {
   readonly title: string;
   readonly watchful: IWatchful;
-  readonly firehose: firehose.CfnDeliveryStream;
+  readonly fh: firehose.CfnDeliveryStream;
 }
 
 export class WatchFirehoseService extends cdk.Construct {
   private readonly watchful: IWatchful;
-  private readonly firehose: firehose.CfnDeliveryStream;
+  private readonly fh: firehose.CfnDeliveryStream;
 
   constructor(scope: cdk.Construct, id: string, props: WatchFirehoseServiceProps) {
     super(scope, id);
 
     this.watchful = props.watchful;
-    this.firehose = props.firehose;
+    this.fh = props.fh;
 
     this.watchful.addSection(props.title, {
-      links: [{ title: 'Firehose Console', url: linkForFirehoseService(this.firehose) }],
+      links: [{ title: 'Firehose Console', url: linkForFirehoseService(this.fh) }],
     });
 
     const {
@@ -52,20 +50,20 @@ export class WatchFirehoseService extends cdk.Construct {
 
   // helper functions for creating metrics
   private createDeliveryToRedshiftSuccessMonitor() {
-    const deliveryToRedshiftSuccessMetric = new Metric({
+    const deliveryToRedshiftSuccessMetric = new cloudwatch.Metric({
       metricName: FirehoseGatewayMetric.DeliveryToRedshiftSuccess,
       namespace: 'AWS/Firehose',
-      period: Duration.minutes(1),
+      period: cdk.Duration.minutes(1),
       statistic: 'sum',
     });
 
     return { deliveryToRedshiftSuccessMetric };
   }
   private createDeliveryToRedshiftRecordsMonitor() {
-    const deliveryToRedshiftRecordsMetric = new Metric({
+    const deliveryToRedshiftRecordsMetric = new cloudwatch.Metric({
       metricName: FirehoseGatewayMetric.DeliveryToRedshiftRecords,
       namespace: 'AWS/Firehose',
-      period: Duration.minutes(1),
+      period: cdk.Duration.minutes(1),
       statistic: 'sum',
     });
     return { deliveryToRedshiftRecordsMetric };
@@ -78,6 +76,6 @@ const enum FirehoseGatewayMetric {
   DeliveryToRedshiftRecords = 'DeliveryToRedshift.Records',
 }
 
-function linkForFirehoseService(firehose: firehose.CfnDeliveryStream) {
-  return `https://console.aws.amazon.com/firehose/home?region=${firehose.stack.region}#/details/${firehose.deliveryStreamName}`;
+function linkForFirehoseService(fh: firehose.CfnDeliveryStream) {
+  return `https://console.aws.amazon.com/firehose/home?region=${fh.stack.region}#/details/${fh.deliveryStreamName}`;
 }

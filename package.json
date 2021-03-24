@@ -81,13 +81,13 @@
     "@aws-cdk/aws-elasticloadbalancingv2": "^1.94.1",
     "@aws-cdk/aws-events": "^1.94.1",
     "@aws-cdk/aws-events-targets": "^1.94.1",
+    "@aws-cdk/aws-kinesisfirehose": "^1.94.1",
     "@aws-cdk/aws-lambda": "^1.94.1",
     "@aws-cdk/aws-rds": "^1.94.1",
     "@aws-cdk/aws-sns": "^1.94.1",
     "@aws-cdk/aws-sns-subscriptions": "^1.94.1",
     "@aws-cdk/aws-sqs": "^1.94.1",
-    "@aws-cdk/core": "^1.94.1",
-    "@aws-cdk/aws-kinesisfirehose": "^1.94.1"
+    "@aws-cdk/core": "^1.94.1"
   },
   "bundledDependencies": [],
   "keywords": [
