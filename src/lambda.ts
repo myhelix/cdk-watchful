@@ -47,7 +47,9 @@ export class WatchLambdaFunction extends Construct {
     super(scope, id);
 
     const cfnFunction = props.fn.node.defaultChild as lambda.CfnFunction;
-    const timeoutSec = cfnFunction? cfnFunction.timeout : 3;
+    console.log(`timeout value: ${cfnFunction.timeout}`);
+    // if we have an IFunction or an unspecified timeout, use the default
+    const timeoutSec = cfnFunction? (cfnFunction.timeout? cfnFunction.timeout : 3) : 3;
 
     this.watchful = props.watchful;
     this.fn = props.fn;
