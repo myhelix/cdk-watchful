@@ -35,8 +35,10 @@ export interface WatchLambdaFunctionOptions {
    * Override duration timeout threshold.
    * Necessary for lambdas that aren't created via the CDK.
    * If this variable is passed, ignore durationThresholdPercent
+   *
+   * @default 3
    */
-  readonly durationTimeout?: number;
+  readonly durationTimeoutSec?: number;
 }
 
 export interface WatchLambdaFunctionProps extends WatchLambdaFunctionOptions {
@@ -57,7 +59,9 @@ export class WatchLambdaFunction extends Construct {
     // if we have an IFunction or an unspecified timeout, use the default of 3 seconds
     let timeoutSec = cfnFunction? (cfnFunction.timeout? cfnFunction.timeout : 3) : 3;
     // if a threshold was passed for duration use it
-    timeoutSec = props.durationTimeout? props.durationTimeout: timeoutSec;
+    if (props.durationTimeoutSec) {
+      timeoutSec = props.durationTimeoutSec;
+    }
 
     this.watchful = props.watchful;
     this.fn = props.fn;
