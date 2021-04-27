@@ -83,19 +83,19 @@ export class WatchLambdaFunction extends Construct {
     const invocationsMetric = this.fn.metricInvocations();
 
     let errorWidget: IWidget;
-      if (props.errorsDisableAlerts) {
-        errorWidget = new cloudwatch.GraphWidget({
-          title: `Errors/${errorsMetric.period.toMinutes()}min`,
-          width: 6,
-          left: [errorsMetric],
-          leftAnnotations: [errorsAlarm.toAnnotation()],
-        })
-      } else {
-        errorWidget = new cloudwatch.AlarmWidget({
-          title: `Errors/${errorsMetric.period.toMinutes()}min`,
-          alarm: errorsAlarm,
-          width: 6,
-      })
+    if (props.errorsDisableAlerts) {
+      errorWidget = new cloudwatch.GraphWidget({
+        title: `Errors/${errorsMetric.period.toMinutes()}min`,
+        width: 6,
+        left: [errorsMetric],
+      });
+    } else {
+      errorWidget = new cloudwatch.AlarmWidget({
+        title: `Errors/${errorsMetric.period.toMinutes()}min`,
+        alarm: errorsAlarm,
+        width: 6,
+      });
+    }
 
     this.watchful.addWidgets(
       new cloudwatch.GraphWidget({
