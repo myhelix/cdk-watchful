@@ -1,5 +1,4 @@
 import * as cloudwatch from '@aws-cdk/aws-cloudwatch';
-import { IWidget } from '@aws-cdk/aws-cloudwatch';
 import * as lambda from '@aws-cdk/aws-lambda';
 import { Construct } from '@aws-cdk/core';
 import { IWatchful } from './api';
@@ -82,7 +81,7 @@ export class WatchLambdaFunction extends Construct {
     const { durationMetric, durationAlarm } = this.createDurationMonitor(timeoutSec!, props.durationThresholdPercent);
     const invocationsMetric = this.fn.metricInvocations();
 
-    let errorWidget: IWidget;
+    let errorWidget: cloudwatch.IWidget;
     if (props.errorsDisableAlerts) {
       errorWidget = new cloudwatch.GraphWidget({
         title: `Errors/${errorsMetric.period.toMinutes()}min`,
