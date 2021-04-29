@@ -5488,7 +5488,7 @@ progress@^2.0.0:
   resolved "https://registry.yarnpkg.com/progress/-/progress-2.0.3.tgz#7e8cf8d8f5b8f239c1bc68beb4eb78567d572ef8"
   integrity sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==
 
-projen@^0.17.51:
+projen@^0.17.72:
   version "0.17.72"
   resolved "https://registry.yarnpkg.com/projen/-/projen-0.17.72.tgz#1b2a30c494b62f74ffe221e2583cb6bf421c1403"
   integrity sha512-yreOm6S2mFSB3KXpKWklb5VZ+LARctSnPVWJadCoOmHYOJ5/k6OTys7Gb+plDcvildi1UWMHi69azdV9AqMrmA==
