@@ -1,10 +1,12 @@
 const { AwsCdkConstructLibrary } = require('projen');
 
+const AUTOMATION_TOKEN = 'PROJEN_GITHUB_TOKEN';
+
 const project = new AwsCdkConstructLibrary({
   name: '@myhelix/cdk-watchful',
   description: 'Watching your CDK apps since 2019',
   defaultReleaseBranch: 'main',
-
+  projenUpgradeSecret: 'PROJEN_GITHUB_TOKEN',
 
   authorName: 'Elad Ben-Israel (maintained by myhelix)',
   authorEmail: 'ops@helix.com',
