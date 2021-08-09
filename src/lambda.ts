@@ -1,4 +1,5 @@
 import * as cloudwatch from '@aws-cdk/aws-cloudwatch';
+import { TreatMissingData } from '@aws-cdk/aws-cloudwatch';
 import * as lambda from '@aws-cdk/aws-lambda';
 import { Construct, Duration } from '@aws-cdk/core';
 import { IWatchful } from './api';
@@ -158,6 +159,7 @@ export class WatchLambdaFunction extends Construct {
         threshold: 1,
         comparisonOperator: cloudwatch.ComparisonOperator.LESS_THAN_THRESHOLD,
         evaluationPeriods: 1,
+        treatMissingData: TreatMissingData.BREACHING,
       });
       this.invocationsMetric.with({ period: invocationsThreshold } );
       this.watchful.addAlarm(this.invocationsAlarm);
