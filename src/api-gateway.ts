@@ -5,6 +5,13 @@ import { IWatchful } from './api';
 
 export interface WatchApiGatewayOptions {
   /**
+   * Flag to disable alerting
+   *
+   * @default false
+   */
+  readonly disableAlerts?: boolean;
+
+  /**
    * Alarm when 5XX errors reach this threshold over 5 minutes.
    *
    * @default 1 any 5xx HTTP response will trigger the alarm
@@ -56,7 +63,8 @@ export class WatchApiGateway extends Construct {
     this.watchful = props.watchful;
 
     const alarmThreshold = props.serverErrorThreshold == null ? 1 : props.serverErrorThreshold;
-    if (alarmThreshold) {
+    const addAlarm = props.disableAlerts == null ? false : props.disableAlerts;
+    if (addAlarm) {
       this.watchful.addAlarm(
         this.createApiGatewayMetric(ApiGatewayMetric.FiveHundredError)
           .createAlarm(this, '5XXErrorAlarm', {
