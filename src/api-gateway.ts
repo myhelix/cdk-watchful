@@ -63,7 +63,7 @@ export class WatchApiGateway extends Construct {
     this.watchful = props.watchful;
 
     const alarmThreshold = props.serverErrorThreshold == null ? 1 : props.serverErrorThreshold;
-    const addAlarm = props.disableAlerts == null ? false : props.disableAlerts;
+    const addAlarm = props.disableAlerts == null ? true : !props.disableAlerts;
     if (addAlarm) {
       this.watchful.addAlarm(
         this.createApiGatewayMetric(ApiGatewayMetric.FiveHundredError)
@@ -83,7 +83,7 @@ export class WatchApiGateway extends Construct {
     });
     [undefined, ...props.watchedOperations || []].forEach(operation =>
       this.watchful.addWidgets(
-        this.createCallGraphWidget(operation, alarmThreshold),
+        this.createCallGraphWidget(addAlarm, operation, alarmThreshold),
         ...props.cacheGraph ? [this.createCacheGraphWidget(operation)] : [],
         this.createLatencyGraphWidget(ApiGatewayMetric.Latency, operation),
         this.createLatencyGraphWidget(ApiGatewayMetric.IntegrationLatency, operation),
@@ -91,8 +91,8 @@ export class WatchApiGateway extends Construct {
     );
   }
 
-  private createCallGraphWidget(opts?: WatchedOperation, alarmThreshold?: number) {
-    const leftAnnotations: HorizontalAnnotation[] = alarmThreshold
+  private createCallGraphWidget( addAlarm: boolean, opts?: WatchedOperation, alarmThreshold?: number) {
+    const leftAnnotations: HorizontalAnnotation[] = addAlarm && alarmThreshold
       ? [{ value: alarmThreshold, color: '#ff0000', label: '5XX Errors Alarm' }]
       : [];
 
