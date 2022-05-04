@@ -1,4 +1,5 @@
-import { Stack, Construct, StackProps, App, Duration } from 'aws-cdk-lib';
+import { Stack, StackProps, App, Duration } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 import { Watchful } from '../src';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as events from 'aws-cdk-lib/aws-events';
@@ -64,7 +65,7 @@ class TrafficDriver extends Construct {
     }
 
     this.fn = new lambda.Function(this, 'LambdaFunction', {
-      code: lambda.Code.asset(path.join(__dirname, 'lambda')),
+      code: lambda.Code.fromAsset(path.join(__dirname, 'lambda')),
       runtime: lambda.Runtime.NODEJS_10_X,
       handler: 'index.handler',
       environment: {
