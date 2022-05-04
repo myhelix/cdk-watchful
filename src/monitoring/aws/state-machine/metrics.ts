@@ -1,5 +1,5 @@
-import { Metric, Statistic } from '@aws-cdk/aws-cloudwatch';
-import { Duration } from '@aws-cdk/core';
+import * as cdk from 'aws-cdk-lib';
+import { Metric, Statistic } from 'aws-cdk-lib/aws-cloudwatch';
 
 const enum Metrics {
   ExecutionsStarted = 'ExecutionsStarted',
@@ -28,8 +28,8 @@ export class StateMachineMetricFactory {
     return new Metric({
       metricName: metric,
       namespace: Namespace,
-      period: Duration.minutes(1),
-      dimensions: {
+      period: cdk.Duration.minutes(1),
+      dimensionsMap: {
         StateMachineArn: stateMachineArn,
       },
     });

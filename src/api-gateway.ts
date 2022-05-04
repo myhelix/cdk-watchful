@@ -1,6 +1,8 @@
-import * as apigw from '@aws-cdk/aws-apigateway';
-import { Metric, MetricOptions, ComparisonOperator, GraphWidget, HorizontalAnnotation } from '@aws-cdk/aws-cloudwatch';
-import { Construct, Duration } from '@aws-cdk/core';
+import { Duration } from 'aws-cdk-lib';
+import * as apigw from 'aws-cdk-lib/aws-apigateway';
+import { Metric, MetricOptions, ComparisonOperator, GraphWidget, HorizontalAnnotation } from 'aws-cdk-lib/aws-cloudwatch';
+
+import { Construct } from 'constructs';
 import { IWatchful } from './api';
 
 export interface WatchApiGatewayOptions {
@@ -70,10 +72,10 @@ export class WatchApiGateway extends Construct {
           .createAlarm(this, '5XXErrorAlarm', {
             alarmDescription: `at ${alarmThreshold}`,
             threshold: alarmThreshold,
-            period: Duration.minutes(5),
+            //period: Duration.minutes(5),
             comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
             evaluationPeriods: 1,
-            statistic: 'sum',
+            //statistic: 'sum',
           }),
       );
     }
@@ -137,9 +139,13 @@ export class WatchApiGateway extends Construct {
     opts?: WatchedOperation,
     metricOpts?: MetricOptions,
   ): Metric {
+    var api_name = this.api.name;
+    if (api_name == undefined) {
+      api_name = '';
+    }
     return new Metric({
-      dimensions: {
-        ApiName: this.api.name,
+      dimensionsMap: {
+        ApiName: api_name,
         Stage: this.stage,
         ...opts && {
           Method: opts.httpMethod,

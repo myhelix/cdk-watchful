@@ -1,6 +1,7 @@
-import * as cloudwatch from '@aws-cdk/aws-cloudwatch';
-import * as sqs from '@aws-cdk/aws-sqs';
-import * as cdk from '@aws-cdk/core';
+import { Duration } from 'aws-cdk-lib';
+import * as cloudwatch from 'aws-cdk-lib/aws-cloudwatch';
+import * as sqs from 'aws-cdk-lib/aws-sqs';
+import { Construct } from 'constructs';
 import { IWatchful } from './api';
 
 export interface WatchSqsOptions {
@@ -12,14 +13,14 @@ export interface WatchSqsServiceProps extends WatchSqsOptions {
   readonly sqs: sqs.IQueue;
 }
 
-export class WatchSqsService extends cdk.Construct {
+export class WatchSqsService extends Construct {
   private readonly watchful: IWatchful;
   private readonly sqs: sqs.IQueue;
 
   private messageMetric!: cloudwatch.Metric;
   private messageAlarm!: cloudwatch.Alarm;
 
-  constructor(scope: cdk.Construct, id: string, props: WatchSqsServiceProps) {
+  constructor(scope: Construct, id: string, props: WatchSqsServiceProps) {
     super(scope, id);
 
     this.watchful = props.watchful;
@@ -47,7 +48,8 @@ export class WatchSqsService extends cdk.Construct {
       metricName: SqsMetric.ApproximateNumberOfMessagesVisible,
       namespace: 'AWS/SQS',
       statistic: 'Maximum',
-      dimensions: {
+      period: Duration.minutes(2),
+      dimensionsMap: {
         QueueName: this.sqs.queueName,
       },
     });
@@ -55,7 +57,6 @@ export class WatchSqsService extends cdk.Construct {
       comparisonOperator: cloudwatch.ComparisonOperator.GREATER_THAN_THRESHOLD,
       metric: this.messageMetric,
       threshold: 0, // TODO pass parameter.  Used for DLQs only right now
-      period: cdk.Duration.minutes(2),
       evaluationPeriods: 1,
       treatMissingData: cloudwatch.TreatMissingData.MISSING,
     });

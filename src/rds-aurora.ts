@@ -1,6 +1,7 @@
-import * as cloudwatch from '@aws-cdk/aws-cloudwatch';
-import * as rds from '@aws-cdk/aws-rds';
-import * as cdk from '@aws-cdk/core';
+import { Duration } from 'aws-cdk-lib';
+import * as cloudwatch from 'aws-cdk-lib/aws-cloudwatch';
+import * as rds from 'aws-cdk-lib/aws-rds';
+import { Construct } from 'constructs';
 import { IWatchful } from './api';
 
 export interface WatchRdsAuroraOptions {
@@ -47,12 +48,12 @@ export interface WatchRdsAuroraProps extends WatchRdsAuroraOptions {
   readonly cluster: rds.DatabaseCluster;
 }
 
-export class WatchRdsAurora extends cdk.Construct {
+export class WatchRdsAurora extends Construct {
 
   private readonly watchful: IWatchful;
   private readonly cluster: rds.DatabaseCluster;
 
-  constructor(scope: cdk.Construct, id: string, props: WatchRdsAuroraProps) {
+  constructor(scope: Construct, id: string, props: WatchRdsAuroraProps) {
     super(scope, id);
 
     this.watchful = props.watchful;
@@ -111,9 +112,9 @@ export class WatchRdsAurora extends cdk.Construct {
     const cpuUtilizationMetric = new cloudwatch.Metric({
       metricName: 'CPUUtilization',
       namespace: 'AWS/RDS',
-      period: cdk.Duration.minutes(5),
+      period: Duration.minutes(5),
       statistic: 'Average',
-      dimensions: {
+      dimensionsMap: {
         DBClusterIdentifier: this.cluster.clusterIdentifier,
       },
     });
@@ -130,9 +131,9 @@ export class WatchRdsAurora extends cdk.Construct {
     const dbConnectionsMetric = new cloudwatch.Metric({
       metricName: 'DatabaseConnections',
       namespace: 'AWS/RDS',
-      period: cdk.Duration.minutes(5),
+      period: Duration.minutes(5),
       statistic: 'Average',
-      dimensions: {
+      dimensionsMap: {
         DBClusterIdentifier: this.cluster.clusterIdentifier,
       },
     });
@@ -149,9 +150,9 @@ export class WatchRdsAurora extends cdk.Construct {
     const dbReplicaLagMetric = new cloudwatch.Metric({
       metricName: 'AuroraReplicaLag',
       namespace: 'AWS/RDS',
-      period: cdk.Duration.minutes(5),
+      period: Duration.minutes(5),
       statistic: 'Average',
-      dimensions: {
+      dimensionsMap: {
         DBClusterIdentifier: this.cluster.clusterIdentifier,
       },
     });
@@ -168,9 +169,9 @@ export class WatchRdsAurora extends cdk.Construct {
     const dbBufferCacheHitRatioMetric = new cloudwatch.Metric({
       metricName: 'BufferCacheHitRatio',
       namespace: 'AWS/RDS',
-      period: cdk.Duration.minutes(5),
+      period: Duration.minutes(5),
       statistic: 'Average',
-      dimensions: {
+      dimensionsMap: {
         DBClusterIdentifier: this.cluster.clusterIdentifier,
       },
     });
@@ -188,36 +189,36 @@ export class WatchRdsAurora extends cdk.Construct {
     const dbInsertThroughputMetric = new cloudwatch.Metric({
       metricName: 'InsertThroughput',
       namespace: 'AWS/RDS',
-      period: cdk.Duration.minutes(5),
+      period: Duration.minutes(5),
       statistic: 'Sum',
-      dimensions: {
+      dimensionsMap: {
         DBClusterIdentifier: this.cluster.clusterIdentifier,
       },
     });
     const dbUpdateThroughputMetric = new cloudwatch.Metric({
       metricName: 'UpdateThroughput',
       namespace: 'AWS/RDS',
-      period: cdk.Duration.minutes(5),
+      period: Duration.minutes(5),
       statistic: 'Sum',
-      dimensions: {
+      dimensionsMap: {
         DBClusterIdentifier: this.cluster.clusterIdentifier,
       },
     });
     const dbSelectThroughputMetric = new cloudwatch.Metric({
       metricName: 'SelectThroughput',
       namespace: 'AWS/RDS',
-      period: cdk.Duration.minutes(5),
+      period: Duration.minutes(5),
       statistic: 'Sum',
-      dimensions: {
+      dimensionsMap: {
         DBClusterIdentifier: this.cluster.clusterIdentifier,
       },
     });
     const dbDeleteThroughputMetric = new cloudwatch.Metric({
       metricName: 'DeleteThroughput',
       namespace: 'AWS/RDS',
-      period: cdk.Duration.minutes(5),
+      period: Duration.minutes(5),
       statistic: 'Sum',
-      dimensions: {
+      dimensionsMap: {
         DBClusterIdentifier: this.cluster.clusterIdentifier,
       },
     });

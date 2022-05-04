@@ -1,17 +1,18 @@
-import * as apigw from '@aws-cdk/aws-apigateway';
-import * as cloudwatch from '@aws-cdk/aws-cloudwatch';
-import * as cloudwatch_actions from '@aws-cdk/aws-cloudwatch-actions';
-import * as dynamodb from '@aws-cdk/aws-dynamodb';
-import * as ecs from '@aws-cdk/aws-ecs';
-import { ApplicationTargetGroup } from '@aws-cdk/aws-elasticloadbalancingv2';
-import * as firehose from '@aws-cdk/aws-kinesisfirehose';
-import * as lambda from '@aws-cdk/aws-lambda';
-import * as rds from '@aws-cdk/aws-rds';
-import * as sns from '@aws-cdk/aws-sns';
-import * as sns_subscriptions from '@aws-cdk/aws-sns-subscriptions';
-import * as sqs from '@aws-cdk/aws-sqs';
-import * as stepfunctions from '@aws-cdk/aws-stepfunctions';
-import { Construct, CfnOutput, Aspects } from '@aws-cdk/core';
+import { CfnOutput, Aspects } from 'aws-cdk-lib';
+import * as apigw from 'aws-cdk-lib/aws-apigateway';
+import * as cloudwatch from 'aws-cdk-lib/aws-cloudwatch';
+import * as cloudwatch_actions from 'aws-cdk-lib/aws-cloudwatch-actions';
+import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
+import * as ecs from 'aws-cdk-lib/aws-ecs';
+import { ApplicationTargetGroup } from 'aws-cdk-lib/aws-elasticloadbalancingv2';
+import * as firehose from 'aws-cdk-lib/aws-kinesisfirehose';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as rds from 'aws-cdk-lib/aws-rds';
+import * as sns from 'aws-cdk-lib/aws-sns';
+import * as sns_subscriptions from 'aws-cdk-lib/aws-sns-subscriptions';
+import * as sqs from 'aws-cdk-lib/aws-sqs';
+import * as stepfunctions from 'aws-cdk-lib/aws-stepfunctions';
+import { Construct } from 'constructs';
 import { IWatchful, SectionOptions } from './api';
 import { WatchApiGatewayOptions, WatchApiGateway } from './api-gateway';
 import { WatchfulAspect, WatchfulAspectProps } from './aspect';
@@ -124,7 +125,7 @@ export class Watchful extends Construct implements IWatchful {
   }
 
   public watchStateMachine(title: string, stateMachine: stepfunctions.StateMachine, options: WatchStateMachineOptions = {}) {
-    return new WatchStateMachine(this, stateMachine.node.uniqueId, {
+    return new WatchStateMachine(this, stateMachine.node.id, {
       title, watchful: this, stateMachine, ...options,
     });
   }

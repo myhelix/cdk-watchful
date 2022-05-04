@@ -1,6 +1,7 @@
-import * as cloudwatch from '@aws-cdk/aws-cloudwatch';
-import * as lambda from '@aws-cdk/aws-lambda';
-import { Construct, Duration } from '@aws-cdk/core';
+import { Duration } from 'aws-cdk-lib';
+import * as cloudwatch from 'aws-cdk-lib/aws-cloudwatch';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import { Construct } from 'constructs';
 import { IWatchful } from './api';
 
 const DEFAULT_DURATION_THRESHOLD_PERCENT = 80;
@@ -166,7 +167,7 @@ export class WatchLambdaFunction extends Construct {
         alarmName: `${fn.functionName}-invocation`,
         alarmDescription: `Expecting invocations to occur every ${invocationsThreshold.toHours()}hours`,
         threshold: 1,
-        period: invocationsThreshold, // deprecated but functional
+        //period: invocationsThreshold, // deprecated but functional
         comparisonOperator: cloudwatch.ComparisonOperator.LESS_THAN_THRESHOLD,
         evaluationPeriods: 1,
         treatMissingData: cloudwatch.TreatMissingData.BREACHING,

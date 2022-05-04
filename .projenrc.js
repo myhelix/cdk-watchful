@@ -1,8 +1,8 @@
-const { AwsCdkConstructLibrary } = require('projen');
+const { awscdk } = require('projen');
 
-const cdkVersion = '1.149.0';
+const cdkVersion = '2.13.0';
 
-const project = new AwsCdkConstructLibrary({
+const project = new awscdk.AwsCdkConstructLibrary({
   name: '@myhelix/cdk-watchful',
   description: 'Watching your CDK apps since 2019',
   defaultReleaseBranch: 'main',
@@ -17,25 +17,6 @@ const project = new AwsCdkConstructLibrary({
 
   cdkVersion,
   cdkVersionPinning: true,
-  cdkDependencies: [
-    '@aws-cdk/aws-apigateway',
-    '@aws-cdk/aws-cloudwatch',
-    '@aws-cdk/aws-cloudwatch-actions',
-    '@aws-cdk/aws-dynamodb',
-    '@aws-cdk/aws-ecs',
-    '@aws-cdk/aws-ecs-patterns',
-    '@aws-cdk/aws-elasticloadbalancingv2',
-    '@aws-cdk/aws-events',
-    '@aws-cdk/aws-events-targets',
-    '@aws-cdk/aws-kinesisfirehose',
-    '@aws-cdk/aws-lambda',
-    '@aws-cdk/aws-rds',
-    '@aws-cdk/aws-sns',
-    '@aws-cdk/aws-sns-subscriptions',
-    '@aws-cdk/aws-sqs',
-    '@aws-cdk/aws-stepfunctions',
-    '@aws-cdk/core',
-  ],
 
   devDeps: ['aws-sdk'],
 });

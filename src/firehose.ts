@@ -1,6 +1,7 @@
-import * as cloudwatch from '@aws-cdk/aws-cloudwatch';
-import * as firehose from '@aws-cdk/aws-kinesisfirehose';
-import * as cdk from '@aws-cdk/core';
+import { Duration } from 'aws-cdk-lib';
+import * as cloudwatch from 'aws-cdk-lib/aws-cloudwatch';
+import * as firehose from 'aws-cdk-lib/aws-kinesisfirehose';
+import { Construct } from 'constructs';
 import { IWatchful } from './api';
 
 export interface WatchFirehoseServiceOptions {
@@ -13,13 +14,13 @@ export interface WatchFirehoseServiceProps extends WatchFirehoseServiceOptions {
   readonly fh: firehose.CfnDeliveryStream;
 }
 
-export class WatchFirehoseService extends cdk.Construct {
+export class WatchFirehoseService extends Construct {
   private readonly watchful: IWatchful;
   private readonly fh: firehose.CfnDeliveryStream;
   private readonly autoResolveEvents: boolean;
 
 
-  constructor(scope: cdk.Construct, id: string, props: WatchFirehoseServiceProps) {
+  constructor(scope: Construct, id: string, props: WatchFirehoseServiceProps) {
     super(scope, id);
 
     this.watchful = props.watchful;
@@ -55,13 +56,17 @@ export class WatchFirehoseService extends cdk.Construct {
 
   // helper functions for creating metrics
   private createDeliveryToRedshiftSuccessMonitor() {
+    var streamname = this.fh.deliveryStreamName;
+    if (streamname == undefined) {
+      streamname = '';
+    }
     const deliveryToRedshiftSuccessMetric = new cloudwatch.Metric({
       metricName: FirehoseGatewayMetric.DeliveryToRedshiftSuccess,
       namespace: 'AWS/Firehose',
-      period: cdk.Duration.minutes(1),
+      period: Duration.minutes(1),
       statistic: 'sum',
-      dimensions: {
-        DeliveryStreamName: this.fh.deliveryStreamName,
+      dimensionsMap: {
+        DeliveryStreamName: streamname,
       },
     });
     const deliveryToRedshiftSuccessAlarm = new cloudwatch.Alarm(this, 'deliveryToRedshiftAlarm', {
@@ -70,7 +75,7 @@ export class WatchFirehoseService extends cdk.Construct {
       comparisonOperator: cloudwatch.ComparisonOperator.LESS_THAN_THRESHOLD,
       metric: deliveryToRedshiftSuccessMetric,
       threshold: 1,
-      period: cdk.Duration.minutes(1),
+      //period: Duration.minutes(1),
       evaluationPeriods: 1,
       treatMissingData: cloudwatch.TreatMissingData.NOT_BREACHING,
     });
@@ -78,13 +83,17 @@ export class WatchFirehoseService extends cdk.Construct {
     return { deliveryToRedshiftSuccessMetric, deliveryToRedshiftSuccessAlarm };
   }
   private createDeliveryToRedshiftRecordsMonitor() {
+    var streamname = this.fh.deliveryStreamName;
+    if (streamname == undefined) {
+      streamname = '';
+    }
     const deliveryToRedshiftRecordsMetric = new cloudwatch.Metric({
       metricName: FirehoseGatewayMetric.DeliveryToRedshiftRecords,
       namespace: 'AWS/Firehose',
-      period: cdk.Duration.minutes(1),
+      period: Duration.minutes(1),
       statistic: 'sum',
-      dimensions: {
-        DeliveryStreamName: this.fh.deliveryStreamName,
+      dimensionsMap: {
+        DeliveryStreamName: streamname,
       },
     });
     return { deliveryToRedshiftRecordsMetric };
