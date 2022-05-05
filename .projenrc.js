@@ -18,7 +18,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   cdkVersion,
   cdkVersionPinning: true,
 
-  devDeps: ['aws-sdk'],
+  devDeps: ['aws-sdk', '@aws-cdk/assert'],
 });
 
 project.gitignore.exclude('.env', '.idea');
