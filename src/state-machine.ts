@@ -1,3 +1,4 @@
+import { Duration } from 'aws-cdk-lib';
 import { ComparisonOperator, GraphWidget } from 'aws-cdk-lib/aws-cloudwatch';
 import { StateMachine } from 'aws-cdk-lib/aws-stepfunctions';
 import { Construct } from 'constructs';
@@ -45,13 +46,15 @@ export class WatchStateMachine extends Construct {
   private createExecutionMetrics() {
     const execMetrics = this.metrics.metricExecutions(this.stateMachine.stateMachineArn);
     const { failed } = execMetrics;
+    failed.with({
+      period: Duration.minutes(5),
+      statistic: 'sum',
+    })
     failed.createAlarm(this, 'ExecutionFailures', {
       alarmDescription: `at ${this.metricFailedThreshold}`,
       threshold: this.metricFailedThreshold,
-      //period: Duration.minutes(5),
       comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
       evaluationPeriods: 1,
-      //statistic: 'sum',
     });
 
     this.watchful.addWidgets(new GraphWidget({

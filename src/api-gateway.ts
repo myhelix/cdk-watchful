@@ -1,6 +1,6 @@
-import { Duration } from 'aws-cdk-lib';
 import * as apigw from 'aws-cdk-lib/aws-apigateway';
 import { Metric, MetricOptions, ComparisonOperator, GraphWidget, HorizontalAnnotation } from 'aws-cdk-lib/aws-cloudwatch';
+import { Duration } from 'aws-cdk-lib/core';
 
 import { Construct } from 'constructs';
 import { IWatchful } from './api';
@@ -67,15 +67,20 @@ export class WatchApiGateway extends Construct {
     const alarmThreshold = props.serverErrorThreshold == null ? 1 : props.serverErrorThreshold;
     const addAlarm = props.disableAlerts == null ? true : !props.disableAlerts;
     if (addAlarm) {
+      const metric = new Metric({
+        namespace: 'ApiGateway',
+        metricName: ApiGatewayMetric.FiveHundredError,
+        statistic: 'sum',
+        period: Duration.minutes(5),
+      });
+      
       this.watchful.addAlarm(
-        this.createApiGatewayMetric(ApiGatewayMetric.FiveHundredError)
+        this.createApiGatewayMetric(ApiGatewayMetric.FiveHundredError, undefined, metric)
           .createAlarm(this, '5XXErrorAlarm', {
             alarmDescription: `at ${alarmThreshold}`,
             threshold: alarmThreshold,
-            //period: Duration.minutes(5),
             comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
             evaluationPeriods: 1,
-            //statistic: 'sum',
           }),
       );
     }
@@ -188,3 +193,7 @@ const enum ApiGatewayMetric {
 function linkForApiGateway(api: apigw.IRestApi) {
   return `https://console.aws.amazon.com/apigateway/home?region=${api.stack.region}#/apis/${api.restApiId}/resources`;
 }
+function amount(amount: any, arg1: number): Duration | undefined {
+  throw new Error('Function not implemented.');
+}
+

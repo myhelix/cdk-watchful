@@ -1,4 +1,5 @@
 import { Duration } from 'aws-cdk-lib';
+import { Period } from 'aws-cdk-lib/aws-apigateway';
 import * as cloudwatch from 'aws-cdk-lib/aws-cloudwatch';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import { Construct } from 'constructs';
@@ -148,6 +149,10 @@ export class WatchDynamoTable extends Construct {
   private createDynamoCapacityAlarm(type: string, metric: cloudwatch.Metric, provisioned: number, percent: number = DEFAULT_PERCENT) {
     const periodMinutes = 5;
     const threshold = calculateUnits(provisioned, percent, Duration.minutes(periodMinutes));
+    metric.with({
+      period: Duration.minutes(periodMinutes),
+      statistic: 'sum',
+    })
     const alarm = metric.createAlarm(this, `CapacityAlarm:${type}`, {
       alarmDescription: `at ${threshold}% of ${type} capacity`,
       threshold,
