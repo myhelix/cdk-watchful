@@ -49,7 +49,7 @@ export class WatchStateMachine extends Construct {
     failed.with({
       period: Duration.minutes(5),
       statistic: 'sum',
-    })
+    });
     failed.createAlarm(this, 'ExecutionFailures', {
       alarmDescription: `at ${this.metricFailedThreshold}`,
       threshold: this.metricFailedThreshold,

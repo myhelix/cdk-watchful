@@ -73,7 +73,6 @@ export class WatchApiGateway extends Construct {
         statistic: 'sum',
         period: Duration.minutes(5),
       });
-      
       this.watchful.addAlarm(
         this.createApiGatewayMetric(ApiGatewayMetric.FiveHundredError, undefined, metric)
           .createAlarm(this, '5XXErrorAlarm', {
@@ -192,8 +191,5 @@ const enum ApiGatewayMetric {
 
 function linkForApiGateway(api: apigw.IRestApi) {
   return `https://console.aws.amazon.com/apigateway/home?region=${api.stack.region}#/apis/${api.restApiId}/resources`;
-}
-function amount(amount: any, arg1: number): Duration | undefined {
-  throw new Error('Function not implemented.');
 }
 
