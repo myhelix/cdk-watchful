@@ -70,14 +70,15 @@ export class WatchApiGateway extends Construct {
       let metric = this.createApiGatewayMetric(ApiGatewayMetric.FiveHundredError);
       metric.with({
         statistic: 'sum',
-        period: Duration.minutes(5),})
+        period: Duration.minutes(5),
+      });
       this.watchful.addAlarm(
         metric.createAlarm(this, '5XXErrorAlarm', {
-            alarmDescription: `at ${alarmThreshold}`,
-            threshold: alarmThreshold,
-            comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
-            evaluationPeriods: 1,
-          }),
+          alarmDescription: `at ${alarmThreshold}`,
+          threshold: alarmThreshold,
+          comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
+          evaluationPeriods: 1,
+        }),
       );
     }
 
