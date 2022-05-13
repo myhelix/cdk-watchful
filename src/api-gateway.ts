@@ -67,13 +67,15 @@ export class WatchApiGateway extends Construct {
     const alarmThreshold = props.serverErrorThreshold == null ? 1 : props.serverErrorThreshold;
     const addAlarm = props.disableAlerts == null ? true : !props.disableAlerts;
     if (addAlarm) {
-      let metric = this.createApiGatewayMetric(ApiGatewayMetric.FiveHundredError);
-      metric.with({
+      const metric = new Metric({
+        namespace: 'AWS/ApiGateway',
+        metricName: ApiGatewayMetric.FiveHundredError,
         statistic: 'sum',
         period: Duration.minutes(5),
       });
+      let apigmetric = this.createApiGatewayMetric(ApiGatewayMetric.FiveHundredError, undefined, metric);
       this.watchful.addAlarm(
-        metric.createAlarm(this, '5XXErrorAlarm', {
+        apigmetric.createAlarm(this, '5XXErrorAlarm', {
           alarmDescription: `at ${alarmThreshold}`,
           threshold: alarmThreshold,
           comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
