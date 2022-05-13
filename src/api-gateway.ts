@@ -1,6 +1,6 @@
+import { Duration } from 'aws-cdk-lib';
 import * as apigw from 'aws-cdk-lib/aws-apigateway';
 import { Metric, MetricOptions, ComparisonOperator, GraphWidget, HorizontalAnnotation } from 'aws-cdk-lib/aws-cloudwatch';
-import { Duration } from 'aws-cdk-lib/core';
 
 import { Construct } from 'constructs';
 import { IWatchful } from './api';
