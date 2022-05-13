@@ -163,7 +163,8 @@ export class WatchLambdaFunction extends Construct {
     const fn = this.fn;
     this.invocationsMetric = fn.metricInvocations();
     if (invocationsEnableAlerts) {
-      this.invocationsMetric.with({ period: invocationsThreshold })
+      this.invocationsMetric.with({ period: invocationsThreshold });
+
       this.invocationsAlarm = this.invocationsMetric.createAlarm(this, 'InvocationAlarm', {
         alarmName: `${fn.functionName}-invocation`,
         alarmDescription: `Expecting invocations to occur every ${invocationsThreshold.toHours()}hours`,
