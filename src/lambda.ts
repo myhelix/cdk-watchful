@@ -163,7 +163,7 @@ export class WatchLambdaFunction extends Construct {
     const fn = this.fn;
     this.invocationsMetric = fn.metricInvocations();
     if (invocationsEnableAlerts) {
-      this.invocationsMetric.with({period: invocationsThreshold})
+      this.invocationsMetric.with({ period: invocationsThreshold })
       this.invocationsAlarm = this.invocationsMetric.createAlarm(this, 'InvocationAlarm', {
         alarmName: `${fn.functionName}-invocation`,
         alarmDescription: `Expecting invocations to occur every ${invocationsThreshold.toHours()}hours`,
@@ -172,8 +172,6 @@ export class WatchLambdaFunction extends Construct {
         evaluationPeriods: 1,
         treatMissingData: cloudwatch.TreatMissingData.BREACHING,
       });
-      // this isn't working as promised, so keep using the deprecated method for now
-      // this.invocationsMetric.with({ period: invocationsThreshold } );
       this.watchful.addAlarm(this.invocationsAlarm, this.autoResolveEvents );
     }
   }
