@@ -9,6 +9,13 @@
 Watchful is an [AWS CDK](https://github.com/awslabs/aws-cdk) construct library that makes it easy
 to monitor CDK apps. It automatically synthesizes alarms and dashboards for supported AWS resources.
 
+# CDK Version managing
+
+main : cdk v1 release branch
+
+dev-cdk-v2 : cdk v2 dev branch
+release-v2 : cdk v2 release branch
+
 **TypeScript:**
 
 ```ts
