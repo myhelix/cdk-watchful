@@ -1,11 +1,11 @@
 const { awscdk } = require('projen');
 
-const cdkVersion = '2.25.0';
+const cdkVersion = '2.29.0';
 
 const project = new awscdk.AwsCdkConstructLibrary({
   name: '@myhelix/cdk-watchful',
   description: 'Watching your CDK apps since 2019',
-  defaultReleaseBranch: 'main',
+  defaultReleaseBranch: 'release-v2',
 
   authorName: 'Elad Ben-Israel (maintained by myhelix)',
   authorEmail: 'ops@helix.com',
