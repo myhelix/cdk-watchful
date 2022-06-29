@@ -7,6 +7,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   description: 'Watching your CDK apps since 2019',
   defaultReleaseBranch: 'release-v2',
   majorVersion: 2,
+
   authorName: 'Elad Ben-Israel (maintained by myhelix)',
   authorEmail: 'ops@helix.com',
   repository: 'https://github.com/myhelix/cdk-watchful.git',
