@@ -47,7 +47,7 @@ export interface WatchApiGatewayProps extends WatchApiGatewayOptions {
   /**
    * The API Gateway REST API that is being watched.
    */
-  readonly restApi: apigw.RestApi;
+  readonly restApi: apigw.IRestApi|apigw.RestApi;
 }
 
 export class WatchApiGateway extends Construct {

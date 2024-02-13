@@ -740,7 +740,7 @@ A list of operations to monitor separately.
 
 ##### `restApi`<sup>Required</sup> <a name="@myhelix/cdk-watchful.WatchApiGatewayProps.property.restApi"></a>
 
-- *Type:* [`@aws-cdk/aws-apigateway.RestApi`](#@aws-cdk/aws-apigateway.RestApi)
+- *Type:* [`@aws-cdk/aws-apigateway.IRestApi`](#@aws-cdk/aws-apigateway.IRestApi) | [`@aws-cdk/aws-apigateway.RestApi`](#@aws-cdk/aws-apigateway.RestApi)
 
 The API Gateway REST API that is being watched.
 
