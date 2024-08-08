@@ -1,5 +1,3 @@
-import * as cloudwatch from '@aws-cdk/aws-cloudwatch';
-import * as lambda from '@aws-cdk/aws-lambda';
 import * as batch from '@aws-cdk/aws-batch';
 import * as events from '@aws-cdk/aws-events';
 import * as events_targets from '@aws-cdk/aws-events-targets';
