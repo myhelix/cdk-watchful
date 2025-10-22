@@ -4,6 +4,9 @@ import { Construct, Duration } from '@aws-cdk/core';
 import { IWatchful } from './api';
 
 const DEFAULT_DURATION_THRESHOLD_PERCENT = 80;
+const DEFAULT_DURATION_EVALUATION_PERIODS = 3;
+const DEFAULT_DURATION_STATISTIC = 'avg';
+const DEFAULT_DURATION_PERIOD = Duration.minutes(5);
 
 export interface WatchLambdaFunctionOptions {
   /**
@@ -55,9 +58,27 @@ export interface WatchLambdaFunctionOptions {
    * Necessary for lambdas that aren't created via the CDK.
    * This value is still adjusted by durationThresholdPercent
    *
-   * @default 3
+   * @default cfnFunction?.timeout if exists, else 3
    */
   readonly durationTimeoutSec?: number;
+
+  /**
+   * Duration datapoints to alarm for alerts.
+   * @default 3
+   */
+  readonly durationDatapointsToAlarm?: number;
+
+  /**
+   * Duration period for the duration metric.
+   * @default Duration.minutes(5)
+   */
+  readonly durationPeriod?: Duration;
+
+  /**
+   * Statistic for the duration metric.
+   * @default 'avg'
+   */
+  readonly durationStatistic?: string;
 
   /**
    * Send notifications to resolve alerts
@@ -108,7 +129,13 @@ export class WatchLambdaFunction extends Construct {
     this.createInvocationsMonitor(props.invocationsEnableAlerts, props.invocationsThreshold);
     this.createErrorsMonitor(props.errorsDisableAlerts, props.errorsPerMinuteThreshold);
     this.createThrottlesMonitor(props.throttlesPerMinuteThreshold);
-    this.createDurationMonitor(timeoutSec!, props.durationThresholdPercent);
+    this.createDurationMonitor(
+      timeoutSec!,
+      props.durationThresholdPercent,
+      props.durationDatapointsToAlarm,
+      props.durationStatistic,
+      props.durationPeriod,
+    );
 
     let invocationWidget: cloudwatch.IWidget;
     if (!props.invocationsEnableAlerts) {
@@ -205,7 +232,12 @@ export class WatchLambdaFunction extends Construct {
     this.watchful.addAlarm(this.throttlesAlarm, this.autoResolveEvents);
   }
 
-  private createDurationMonitor(timeoutSec: number, durationPercentThreshold: number = DEFAULT_DURATION_THRESHOLD_PERCENT) {
+  private createDurationMonitor(
+    timeoutSec: number,
+    durationPercentThreshold: number = DEFAULT_DURATION_THRESHOLD_PERCENT,
+    evaluationPeriods: number = DEFAULT_DURATION_EVALUATION_PERIODS,
+    statistic: string = DEFAULT_DURATION_STATISTIC,
+    period: Duration = DEFAULT_DURATION_PERIOD) {
     const fn = this.fn;
     this.durationMetric = fn.metricDuration();
     const durationThresholdSec = Math.floor(durationPercentThreshold / 100 * timeoutSec);
@@ -214,7 +246,9 @@ export class WatchLambdaFunction extends Construct {
       alarmDescription: `p99 latency >= ${durationThresholdSec}s (${durationPercentThreshold}%)`,
       comparisonOperator: cloudwatch.ComparisonOperator.GREATER_THAN_THRESHOLD,
       threshold: durationThresholdSec * 1000, // milliseconds
-      evaluationPeriods: 3,
+      evaluationPeriods: evaluationPeriods,
+      statistic: statistic,
+      period: period,
     });
     this.watchful.addAlarm(this.durationAlarm, this.autoResolveEvents);
   }
