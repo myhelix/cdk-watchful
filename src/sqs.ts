@@ -5,6 +5,8 @@ import { Construct } from 'constructs';
 import { IWatchful } from './api';
 
 export interface WatchSqsOptions {
+  /** Construct id for the CloudWatch alarm. @default 'deliveryToRedshiftAlarm' (preserves existing alarm identity; pass a descriptive id for new callers) */
+  readonly alarmId?: string;
 }
 
 export interface WatchSqsServiceProps extends WatchSqsOptions {
@@ -13,9 +15,12 @@ export interface WatchSqsServiceProps extends WatchSqsOptions {
   readonly sqs: sqs.IQueue;
 }
 
+const DEFAULT_ALARM_ID = 'deliveryToRedshiftAlarm';
+
 export class WatchSqsService extends Construct {
   private readonly watchful: IWatchful;
   private readonly sqs: sqs.IQueue;
+  private readonly alarmId: string;
 
   private messageMetric!: cloudwatch.Metric;
   private messageAlarm!: cloudwatch.Alarm;
@@ -25,6 +30,7 @@ export class WatchSqsService extends Construct {
 
     this.watchful = props.watchful;
     this.sqs = props.sqs;
+    this.alarmId = props.alarmId ?? DEFAULT_ALARM_ID;
 
     this.watchful.addSection(props.title, {
       links: [{ title: 'SQS Console', url: linkForSqsService(this.sqs) }],
@@ -53,7 +59,7 @@ export class WatchSqsService extends Construct {
         QueueName: this.sqs.queueName,
       },
     });
-    this.messageAlarm = new cloudwatch.Alarm(this, 'deliveryToRedshiftAlarm', {
+    this.messageAlarm = new cloudwatch.Alarm(this, this.alarmId, {
       comparisonOperator: cloudwatch.ComparisonOperator.GREATER_THAN_THRESHOLD,
       metric: this.messageMetric,
       threshold: 0, // TODO pass parameter.  Used for DLQs only right now
