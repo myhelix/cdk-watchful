@@ -2684,6 +2684,27 @@ import { WatchSqsOptions } from '@myhelix/cdk-watchful'
 const watchSqsOptions: WatchSqsOptions = { ... }
 ```
 
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@myhelix/cdk-watchful.WatchSqsOptions.property.alarmId">alarmId</a></code> | <code>string</code> | Construct id for the CloudWatch alarm. |
+
+---
+
+##### `alarmId`<sup>Optional</sup> <a name="alarmId" id="@myhelix/cdk-watchful.WatchSqsOptions.property.alarmId"></a>
+
+```typescript
+public readonly alarmId: string;
+```
+
+- *Type:* string
+
+Construct id for the CloudWatch alarm.
+
+@default 'deliveryToRedshiftAlarm' (preserves existing alarm identity; pass a descriptive id for new callers)
+
+---
 
 ### WatchSqsServiceProps <a name="WatchSqsServiceProps" id="@myhelix/cdk-watchful.WatchSqsServiceProps"></a>
 
@@ -2699,9 +2720,24 @@ const watchSqsServiceProps: WatchSqsServiceProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@myhelix/cdk-watchful.WatchSqsServiceProps.property.alarmId">alarmId</a></code> | <code>string</code> | Construct id for the CloudWatch alarm. |
 | <code><a href="#@myhelix/cdk-watchful.WatchSqsServiceProps.property.sqs">sqs</a></code> | <code>aws-cdk-lib.aws_sqs.IQueue</code> | *No description.* |
 | <code><a href="#@myhelix/cdk-watchful.WatchSqsServiceProps.property.title">title</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#@myhelix/cdk-watchful.WatchSqsServiceProps.property.watchful">watchful</a></code> | <code><a href="#@myhelix/cdk-watchful.IWatchful">IWatchful</a></code> | *No description.* |
+
+---
+
+##### `alarmId`<sup>Optional</sup> <a name="alarmId" id="@myhelix/cdk-watchful.WatchSqsServiceProps.property.alarmId"></a>
+
+```typescript
+public readonly alarmId: string;
+```
+
+- *Type:* string
+
+Construct id for the CloudWatch alarm.
+
+@default 'deliveryToRedshiftAlarm' (preserves existing alarm identity; pass a descriptive id for new callers)
 
 ---
 
