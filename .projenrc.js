@@ -25,3 +25,25 @@ project.gitignore.exclude('.env', '.idea');
 project.gitignore.exclude('example/*.js', 'example/*.d.ts');
 
 project.synth();
+
+// Post-synth: bump deprecated GitHub Actions versions in projen-generated workflows.
+// projen 0.55.6 emits actions/upload-artifact@v2 and actions/download-artifact@v2,
+// which GitHub Actions has deprecated and now fails at the infra level. Upgrading
+// projen itself is a larger change — this rewrite keeps the pin intact.
+const fs = require('fs');
+const path = require('path');
+const workflowsDir = '.github/workflows';
+if (fs.existsSync(workflowsDir)) {
+  for (const file of fs.readdirSync(workflowsDir)) {
+    const p = path.join(workflowsDir, file);
+    let content = fs.readFileSync(p, 'utf8');
+    const bumped = content
+      .replace(/actions\/upload-artifact@v2(?:\.\d+){0,2}/g, 'actions/upload-artifact@v4')
+      .replace(/actions\/download-artifact@v2(?:\.\d+){0,2}/g, 'actions/download-artifact@v4');
+    if (bumped !== content) {
+      fs.chmodSync(p, 0o644);
+      fs.writeFileSync(p, bumped);
+      fs.chmodSync(p, 0o444);
+    }
+  }
+}
