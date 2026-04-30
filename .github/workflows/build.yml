@@ -34,6 +34,7 @@ jobs:
         with:
           name: .repo.patch
           path: .repo.patch
+          include-hidden-files: true
       - name: Fail build on mutation
         if: steps.self_mutation.outputs.self_mutation_happened
         run: |-
@@ -45,6 +46,7 @@ jobs:
         with:
           name: build-artifact
           path: dist
+          include-hidden-files: true
     container:
       image: jsii/superchain:1-buster-slim-node14
   self-mutation:

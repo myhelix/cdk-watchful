@@ -37,6 +37,7 @@ jobs:
         with:
           name: build-artifact
           path: dist
+          include-hidden-files: true
     container:
       image: jsii/superchain:1-buster-slim-node14
   release_github:

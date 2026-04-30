@@ -37,9 +37,15 @@ if (fs.existsSync(workflowsDir)) {
   for (const file of fs.readdirSync(workflowsDir)) {
     const p = path.join(workflowsDir, file);
     let content = fs.readFileSync(p, 'utf8');
-    const bumped = content
+    let bumped = content
       .replace(/actions\/upload-artifact@v2(?:\.\d+){0,2}/g, 'actions/upload-artifact@v4')
       .replace(/actions\/download-artifact@v2(?:\.\d+){0,2}/g, 'actions/download-artifact@v4');
+    // upload-artifact@v4 excludes hidden files by default, but projen keeps
+    // task definitions in `.projen/` so we need them in the artifact.
+    bumped = bumped.replace(
+      /( {8}uses: actions\/upload-artifact@v4\n {8}with:\n(?: {10}[^\n]+\n)+)/g,
+      (match) => match.includes('include-hidden-files') ? match : match + '          include-hidden-files: true\n',
+    );
     if (bumped !== content) {
       fs.chmodSync(p, 0o644);
       fs.writeFileSync(p, bumped);
