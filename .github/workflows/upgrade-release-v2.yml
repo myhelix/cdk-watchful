@@ -29,10 +29,11 @@ jobs:
           git diff --staged --patch --exit-code > .repo.patch || echo "::set-output name=patch_created::true"
       - if: steps.create_patch.outputs.patch_created
         name: Upload patch
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: .repo.patch
           path: .repo.patch
+          include-hidden-files: true
     container:
       image: jsii/superchain:1-buster-slim-node14
   pr:
@@ -50,7 +51,7 @@ jobs:
           token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
           ref: release-v2
       - name: Download patch
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: .repo.patch
           path: ${{ runner.temp }}
