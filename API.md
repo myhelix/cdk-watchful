@@ -1195,6 +1195,33 @@ Send notifications to resolve alerts.
 
 ---
 
+##### `durationDatapointsToAlarm`<sup>Optional</sup> <a name="@myhelix/cdk-watchful.WatchLambdaFunctionOptions.property.durationDatapointsToAlarm"></a>
+
+- *Type:* `number`
+- *Default:* 3
+
+Duration datapoints to alarm for alerts.
+
+---
+
+##### `durationPeriod`<sup>Optional</sup> <a name="@myhelix/cdk-watchful.WatchLambdaFunctionOptions.property.durationPeriod"></a>
+
+- *Type:* [`@aws-cdk/core.Duration`](#@aws-cdk/core.Duration)
+- *Default:* Duration.minutes(5)
+
+Duration period for the duration metric.
+
+---
+
+##### `durationStatistic`<sup>Optional</sup> <a name="@myhelix/cdk-watchful.WatchLambdaFunctionOptions.property.durationStatistic"></a>
+
+- *Type:* `string`
+- *Default:* 'avg'
+
+Statistic for the duration metric.
+
+---
+
 ##### `durationThresholdPercent`<sup>Optional</sup> <a name="@myhelix/cdk-watchful.WatchLambdaFunctionOptions.property.durationThresholdPercent"></a>
 
 - *Type:* `number`
@@ -1210,7 +1237,7 @@ function exceeds 50% of the function's timeout setting.
 ##### `durationTimeoutSec`<sup>Optional</sup> <a name="@myhelix/cdk-watchful.WatchLambdaFunctionOptions.property.durationTimeoutSec"></a>
 
 - *Type:* `number`
-- *Default:* 3
+- *Default:* cfnFunction?.timeout if exists, else 3
 
 Override duration timeout threshold.
 
@@ -1284,6 +1311,33 @@ Send notifications to resolve alerts.
 
 ---
 
+##### `durationDatapointsToAlarm`<sup>Optional</sup> <a name="@myhelix/cdk-watchful.WatchLambdaFunctionProps.property.durationDatapointsToAlarm"></a>
+
+- *Type:* `number`
+- *Default:* 3
+
+Duration datapoints to alarm for alerts.
+
+---
+
+##### `durationPeriod`<sup>Optional</sup> <a name="@myhelix/cdk-watchful.WatchLambdaFunctionProps.property.durationPeriod"></a>
+
+- *Type:* [`@aws-cdk/core.Duration`](#@aws-cdk/core.Duration)
+- *Default:* Duration.minutes(5)
+
+Duration period for the duration metric.
+
+---
+
+##### `durationStatistic`<sup>Optional</sup> <a name="@myhelix/cdk-watchful.WatchLambdaFunctionProps.property.durationStatistic"></a>
+
+- *Type:* `string`
+- *Default:* 'avg'
+
+Statistic for the duration metric.
+
+---
+
 ##### `durationThresholdPercent`<sup>Optional</sup> <a name="@myhelix/cdk-watchful.WatchLambdaFunctionProps.property.durationThresholdPercent"></a>
 
 - *Type:* `number`
@@ -1299,7 +1353,7 @@ function exceeds 50% of the function's timeout setting.
 ##### `durationTimeoutSec`<sup>Optional</sup> <a name="@myhelix/cdk-watchful.WatchLambdaFunctionProps.property.durationTimeoutSec"></a>
 
 - *Type:* `number`
-- *Default:* 3
+- *Default:* cfnFunction?.timeout if exists, else 3
 
 Override duration timeout threshold.
 
