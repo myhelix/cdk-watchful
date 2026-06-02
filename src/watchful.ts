@@ -11,6 +11,7 @@ import * as sns from '@aws-cdk/aws-sns';
 import * as sns_subscriptions from '@aws-cdk/aws-sns-subscriptions';
 import * as sqs from '@aws-cdk/aws-sqs';
 import * as stepfunctions from '@aws-cdk/aws-stepfunctions';
+import * as batch from '@aws-cdk/aws-batch';
 import { Construct, CfnOutput, Aspects } from '@aws-cdk/core';
 import { IWatchful, SectionOptions } from './api';
 import { WatchApiGatewayOptions, WatchApiGateway } from './api-gateway';
@@ -22,6 +23,7 @@ import { WatchLambdaFunctionOptions, WatchLambdaFunction } from './lambda';
 import { WatchRdsAuroraOptions, WatchRdsAurora } from './rds-aurora';
 import { WatchSqsOptions, WatchSqsService } from './sqs';
 import { WatchStateMachineOptions, WatchStateMachine } from './state-machine';
+import { WatchBatchJobs } from './batch';
 
 export interface WatchfulProps {
   readonly alarmEmail?: string;
@@ -146,6 +148,12 @@ export class Watchful extends Construct implements IWatchful {
   public watchSqs(title: string, sqs: sqs.IQueue, options: WatchSqsOptions = {}) {
     return new WatchSqsService(this, sqs.node.addr, {
       title, watchful: this, sqs, ...options,
+    });
+  }
+
+  public watchBatchJobs(title: string, batchQueue: batch.IJobQueue, alarmTopic: sns.ITopic) {
+    return new WatchBatchJobs(this, batchQueue.node.addr, {
+      title, watchful: this, batchQueue, alarmTopic,
     });
   }
 }
