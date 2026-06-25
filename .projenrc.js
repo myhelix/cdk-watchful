@@ -18,6 +18,11 @@ const project = new awscdk.AwsCdkConstructLibrary({
   cdkVersion,
   cdkVersionPinning: true,
 
+  // Anchor release line to v2.x. The bump task filters tags by "v2.*" and
+  // refuses to publish a non-v2 version. v2.29.0 was pre-tagged on this
+  // branch so standard-version minor-bumps to v2.30.0 on the next release.
+  majorVersion: 2,
+
   devDeps: ['aws-sdk', '@aws-cdk/assert'],
 });
 
