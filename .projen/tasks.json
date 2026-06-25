@@ -178,7 +178,8 @@
       "name": "release:release-v2",
       "description": "Prepare a release from \"release-v2\" branch",
       "env": {
-        "RELEASE": "true"
+        "RELEASE": "true",
+        "MAJOR": "2"
       },
       "steps": [
         {
