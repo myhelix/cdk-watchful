@@ -1304,10 +1304,87 @@ const watchApiGatewayOptions: WatchApiGatewayOptions = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@myhelix/cdk-watchful.WatchApiGatewayOptions.property.alarmDatapointsToAlarm">alarmDatapointsToAlarm</a></code> | <code>number</code> | The number of data points within alarmEvaluationPeriods that must breach the threshold for the alarm to fire. |
+| <code><a href="#@myhelix/cdk-watchful.WatchApiGatewayOptions.property.alarmDescription">alarmDescription</a></code> | <code>string</code> | Custom alarm description. |
+| <code><a href="#@myhelix/cdk-watchful.WatchApiGatewayOptions.property.alarmEvaluationPeriods">alarmEvaluationPeriods</a></code> | <code>number</code> | The number of periods (of alarmPeriod each) over which the metric is compared to the threshold. |
+| <code><a href="#@myhelix/cdk-watchful.WatchApiGatewayOptions.property.alarmPeriod">alarmPeriod</a></code> | <code>aws-cdk-lib.Duration</code> | The period over which the 5XX error alarm's metric is evaluated. |
+| <code><a href="#@myhelix/cdk-watchful.WatchApiGatewayOptions.property.alarmTreatMissingData">alarmTreatMissingData</a></code> | <code>aws-cdk-lib.aws_cloudwatch.TreatMissingData</code> | How the alarm treats missing data points. |
 | <code><a href="#@myhelix/cdk-watchful.WatchApiGatewayOptions.property.cacheGraph">cacheGraph</a></code> | <code>boolean</code> | Include a dashboard graph for caching metrics. |
 | <code><a href="#@myhelix/cdk-watchful.WatchApiGatewayOptions.property.disableAlerts">disableAlerts</a></code> | <code>boolean</code> | Flag to disable alerting. |
-| <code><a href="#@myhelix/cdk-watchful.WatchApiGatewayOptions.property.serverErrorThreshold">serverErrorThreshold</a></code> | <code>number</code> | Alarm when 5XX errors reach this threshold over 5 minutes. |
+| <code><a href="#@myhelix/cdk-watchful.WatchApiGatewayOptions.property.serverErrorThreshold">serverErrorThreshold</a></code> | <code>number</code> | Alarm when 5XX errors reach this threshold within alarmPeriod. |
 | <code><a href="#@myhelix/cdk-watchful.WatchApiGatewayOptions.property.watchedOperations">watchedOperations</a></code> | <code><a href="#@myhelix/cdk-watchful.WatchedOperation">WatchedOperation</a>[]</code> | A list of operations to monitor separately. |
+
+---
+
+##### `alarmDatapointsToAlarm`<sup>Optional</sup> <a name="alarmDatapointsToAlarm" id="@myhelix/cdk-watchful.WatchApiGatewayOptions.property.alarmDatapointsToAlarm"></a>
+
+```typescript
+public readonly alarmDatapointsToAlarm: number;
+```
+
+- *Type:* number
+- *Default:* same as alarmEvaluationPeriods (every period must breach)
+
+The number of data points within alarmEvaluationPeriods that must breach the threshold for the alarm to fire.
+
+Set this lower than alarmEvaluationPeriods to
+require a sustained breach (e.g. 3 of 5 periods) instead of alarming on every
+isolated breach.
+
+---
+
+##### `alarmDescription`<sup>Optional</sup> <a name="alarmDescription" id="@myhelix/cdk-watchful.WatchApiGatewayOptions.property.alarmDescription"></a>
+
+```typescript
+public readonly alarmDescription: string;
+```
+
+- *Type:* string
+- *Default:* `at ${serverErrorThreshold}`
+
+Custom alarm description.
+
+Use this to point on-call at what the alarm means
+and where to look, instead of the default's bare threshold value.
+
+---
+
+##### `alarmEvaluationPeriods`<sup>Optional</sup> <a name="alarmEvaluationPeriods" id="@myhelix/cdk-watchful.WatchApiGatewayOptions.property.alarmEvaluationPeriods"></a>
+
+```typescript
+public readonly alarmEvaluationPeriods: number;
+```
+
+- *Type:* number
+- *Default:* 1
+
+The number of periods (of alarmPeriod each) over which the metric is compared to the threshold.
+
+---
+
+##### `alarmPeriod`<sup>Optional</sup> <a name="alarmPeriod" id="@myhelix/cdk-watchful.WatchApiGatewayOptions.property.alarmPeriod"></a>
+
+```typescript
+public readonly alarmPeriod: Duration;
+```
+
+- *Type:* aws-cdk-lib.Duration
+- *Default:* Duration.minutes(5)
+
+The period over which the 5XX error alarm's metric is evaluated.
+
+---
+
+##### `alarmTreatMissingData`<sup>Optional</sup> <a name="alarmTreatMissingData" id="@myhelix/cdk-watchful.WatchApiGatewayOptions.property.alarmTreatMissingData"></a>
+
+```typescript
+public readonly alarmTreatMissingData: TreatMissingData;
+```
+
+- *Type:* aws-cdk-lib.aws_cloudwatch.TreatMissingData
+- *Default:* CloudWatch's own default (TreatMissingData.MISSING)
+
+How the alarm treats missing data points.
 
 ---
 
@@ -1346,7 +1423,7 @@ public readonly serverErrorThreshold: number;
 - *Type:* number
 - *Default:* 1 any 5xx HTTP response will trigger the alarm
 
-Alarm when 5XX errors reach this threshold over 5 minutes.
+Alarm when 5XX errors reach this threshold within alarmPeriod.
 
 ---
 
@@ -1377,13 +1454,90 @@ const watchApiGatewayProps: WatchApiGatewayProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@myhelix/cdk-watchful.WatchApiGatewayProps.property.alarmDatapointsToAlarm">alarmDatapointsToAlarm</a></code> | <code>number</code> | The number of data points within alarmEvaluationPeriods that must breach the threshold for the alarm to fire. |
+| <code><a href="#@myhelix/cdk-watchful.WatchApiGatewayProps.property.alarmDescription">alarmDescription</a></code> | <code>string</code> | Custom alarm description. |
+| <code><a href="#@myhelix/cdk-watchful.WatchApiGatewayProps.property.alarmEvaluationPeriods">alarmEvaluationPeriods</a></code> | <code>number</code> | The number of periods (of alarmPeriod each) over which the metric is compared to the threshold. |
+| <code><a href="#@myhelix/cdk-watchful.WatchApiGatewayProps.property.alarmPeriod">alarmPeriod</a></code> | <code>aws-cdk-lib.Duration</code> | The period over which the 5XX error alarm's metric is evaluated. |
+| <code><a href="#@myhelix/cdk-watchful.WatchApiGatewayProps.property.alarmTreatMissingData">alarmTreatMissingData</a></code> | <code>aws-cdk-lib.aws_cloudwatch.TreatMissingData</code> | How the alarm treats missing data points. |
 | <code><a href="#@myhelix/cdk-watchful.WatchApiGatewayProps.property.cacheGraph">cacheGraph</a></code> | <code>boolean</code> | Include a dashboard graph for caching metrics. |
 | <code><a href="#@myhelix/cdk-watchful.WatchApiGatewayProps.property.disableAlerts">disableAlerts</a></code> | <code>boolean</code> | Flag to disable alerting. |
-| <code><a href="#@myhelix/cdk-watchful.WatchApiGatewayProps.property.serverErrorThreshold">serverErrorThreshold</a></code> | <code>number</code> | Alarm when 5XX errors reach this threshold over 5 minutes. |
+| <code><a href="#@myhelix/cdk-watchful.WatchApiGatewayProps.property.serverErrorThreshold">serverErrorThreshold</a></code> | <code>number</code> | Alarm when 5XX errors reach this threshold within alarmPeriod. |
 | <code><a href="#@myhelix/cdk-watchful.WatchApiGatewayProps.property.watchedOperations">watchedOperations</a></code> | <code><a href="#@myhelix/cdk-watchful.WatchedOperation">WatchedOperation</a>[]</code> | A list of operations to monitor separately. |
 | <code><a href="#@myhelix/cdk-watchful.WatchApiGatewayProps.property.restApi">restApi</a></code> | <code>aws-cdk-lib.aws_apigateway.RestApi</code> | The API Gateway REST API that is being watched. |
 | <code><a href="#@myhelix/cdk-watchful.WatchApiGatewayProps.property.title">title</a></code> | <code>string</code> | The title of this section. |
 | <code><a href="#@myhelix/cdk-watchful.WatchApiGatewayProps.property.watchful">watchful</a></code> | <code><a href="#@myhelix/cdk-watchful.IWatchful">IWatchful</a></code> | The Watchful instance to add widgets into. |
+
+---
+
+##### `alarmDatapointsToAlarm`<sup>Optional</sup> <a name="alarmDatapointsToAlarm" id="@myhelix/cdk-watchful.WatchApiGatewayProps.property.alarmDatapointsToAlarm"></a>
+
+```typescript
+public readonly alarmDatapointsToAlarm: number;
+```
+
+- *Type:* number
+- *Default:* same as alarmEvaluationPeriods (every period must breach)
+
+The number of data points within alarmEvaluationPeriods that must breach the threshold for the alarm to fire.
+
+Set this lower than alarmEvaluationPeriods to
+require a sustained breach (e.g. 3 of 5 periods) instead of alarming on every
+isolated breach.
+
+---
+
+##### `alarmDescription`<sup>Optional</sup> <a name="alarmDescription" id="@myhelix/cdk-watchful.WatchApiGatewayProps.property.alarmDescription"></a>
+
+```typescript
+public readonly alarmDescription: string;
+```
+
+- *Type:* string
+- *Default:* `at ${serverErrorThreshold}`
+
+Custom alarm description.
+
+Use this to point on-call at what the alarm means
+and where to look, instead of the default's bare threshold value.
+
+---
+
+##### `alarmEvaluationPeriods`<sup>Optional</sup> <a name="alarmEvaluationPeriods" id="@myhelix/cdk-watchful.WatchApiGatewayProps.property.alarmEvaluationPeriods"></a>
+
+```typescript
+public readonly alarmEvaluationPeriods: number;
+```
+
+- *Type:* number
+- *Default:* 1
+
+The number of periods (of alarmPeriod each) over which the metric is compared to the threshold.
+
+---
+
+##### `alarmPeriod`<sup>Optional</sup> <a name="alarmPeriod" id="@myhelix/cdk-watchful.WatchApiGatewayProps.property.alarmPeriod"></a>
+
+```typescript
+public readonly alarmPeriod: Duration;
+```
+
+- *Type:* aws-cdk-lib.Duration
+- *Default:* Duration.minutes(5)
+
+The period over which the 5XX error alarm's metric is evaluated.
+
+---
+
+##### `alarmTreatMissingData`<sup>Optional</sup> <a name="alarmTreatMissingData" id="@myhelix/cdk-watchful.WatchApiGatewayProps.property.alarmTreatMissingData"></a>
+
+```typescript
+public readonly alarmTreatMissingData: TreatMissingData;
+```
+
+- *Type:* aws-cdk-lib.aws_cloudwatch.TreatMissingData
+- *Default:* CloudWatch's own default (TreatMissingData.MISSING)
+
+How the alarm treats missing data points.
 
 ---
 
@@ -1422,7 +1576,7 @@ public readonly serverErrorThreshold: number;
 - *Type:* number
 - *Default:* 1 any 5xx HTTP response will trigger the alarm
 
-Alarm when 5XX errors reach this threshold over 5 minutes.
+Alarm when 5XX errors reach this threshold within alarmPeriod.
 
 ---
 
