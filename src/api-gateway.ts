@@ -1,6 +1,6 @@
 import { Duration } from 'aws-cdk-lib';
 import * as apigw from 'aws-cdk-lib/aws-apigateway';
-import { Metric, MetricOptions, ComparisonOperator, GraphWidget, HorizontalAnnotation } from 'aws-cdk-lib/aws-cloudwatch';
+import { Metric, MetricOptions, ComparisonOperator, GraphWidget, HorizontalAnnotation, TreatMissingData } from 'aws-cdk-lib/aws-cloudwatch';
 
 import { Construct } from 'constructs';
 import { IWatchful } from './api';
@@ -14,11 +14,51 @@ export interface WatchApiGatewayOptions {
   readonly disableAlerts?: boolean;
 
   /**
-   * Alarm when 5XX errors reach this threshold over 5 minutes.
+   * Alarm when 5XX errors reach this threshold within alarmPeriod.
    *
    * @default 1 any 5xx HTTP response will trigger the alarm
    */
   readonly serverErrorThreshold?: number;
+
+  /**
+   * The period over which the 5XX error alarm's metric is evaluated.
+   *
+   * @default Duration.minutes(5)
+   */
+  readonly alarmPeriod?: Duration;
+
+  /**
+   * The number of periods (of alarmPeriod each) over which the metric is compared
+   * to the threshold.
+   *
+   * @default 1
+   */
+  readonly alarmEvaluationPeriods?: number;
+
+  /**
+   * The number of data points within alarmEvaluationPeriods that must breach the
+   * threshold for the alarm to fire. Set this lower than alarmEvaluationPeriods to
+   * require a sustained breach (e.g. 3 of 5 periods) instead of alarming on every
+   * isolated breach.
+   *
+   * @default - same as alarmEvaluationPeriods (every period must breach)
+   */
+  readonly alarmDatapointsToAlarm?: number;
+
+  /**
+   * How the alarm treats missing data points.
+   *
+   * @default - CloudWatch's own default (TreatMissingData.MISSING)
+   */
+  readonly alarmTreatMissingData?: TreatMissingData;
+
+  /**
+   * Custom alarm description. Use this to point on-call at what the alarm means
+   * and where to look, instead of the default's bare threshold value.
+   *
+   * @default `at ${serverErrorThreshold}`
+   */
+  readonly alarmDescription?: string;
 
   /**
    * A list of operations to monitor separately.
@@ -71,15 +111,17 @@ export class WatchApiGateway extends Construct {
         namespace: 'AWS/ApiGateway',
         metricName: ApiGatewayMetric.FiveHundredError,
         statistic: 'sum',
-        period: Duration.minutes(5),
+        period: props.alarmPeriod ?? Duration.minutes(5),
       });
       let apigmetric = this.createApiGatewayMetric(ApiGatewayMetric.FiveHundredError, undefined, metric);
       this.watchful.addAlarm(
         apigmetric.createAlarm(this, '5XXErrorAlarm', {
-          alarmDescription: `at ${alarmThreshold}`,
+          alarmDescription: props.alarmDescription ?? `at ${alarmThreshold}`,
           threshold: alarmThreshold,
           comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
-          evaluationPeriods: 1,
+          evaluationPeriods: props.alarmEvaluationPeriods ?? 1,
+          datapointsToAlarm: props.alarmDatapointsToAlarm,
+          treatMissingData: props.alarmTreatMissingData,
         }),
       );
     }
