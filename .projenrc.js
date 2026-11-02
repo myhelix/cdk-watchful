@@ -40,6 +40,8 @@ const project = new awscdk.AwsCdkConstructLibrary({
   devDeps: ['aws-sdk', 'eslint-plugin-import'],
 });
 
+project.addDevDeps('jsii-diff@^1.131.0');
+
 project.gitignore.exclude('.env', '.idea');
 project.gitignore.exclude('example/*.js', 'example/*.d.ts');
 
