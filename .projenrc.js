@@ -1,4 +1,4 @@
-const { awscdk } = require('projen');
+const { awscdk, DependencyType } = require('projen');
 
 const cdkVersion = '1.161.0';
 
@@ -39,6 +39,9 @@ const project = new awscdk.AwsCdkConstructLibrary({
 
   devDeps: ['aws-sdk', 'eslint-plugin-import'],
 });
+
+// projen pins jsii-diff below 1.131.0, which is vulnerable to CVE-2026-15895
+project.deps.addDependency('jsii-diff@^1.131.0', DependencyType.BUILD);
 
 project.gitignore.exclude('.env', '.idea');
 project.gitignore.exclude('example/*.js', 'example/*.d.ts');
