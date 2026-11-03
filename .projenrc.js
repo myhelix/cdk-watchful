@@ -1,4 +1,6 @@
-const { awscdk } = require('projen');
+const fs = require('fs');
+const path = require('path');
+const { awscdk, Component, DependencyType } = require('projen');
 
 const cdkVersion = '1.161.0';
 
@@ -39,6 +41,36 @@ const project = new awscdk.AwsCdkConstructLibrary({
 
   devDeps: ['aws-sdk', 'eslint-plugin-import'],
 });
+
+// projen pins jsii-diff below 1.131.0, which is vulnerable to CVE-2026-15895
+project.deps.addDependency('jsii-diff@^1.131.0', DependencyType.BUILD);
+
+// projen 0.58 hard-codes deprecated artifact actions, and GitHub rejects them.
+// The dist artifact is a repo copy whose .projen/ dir must survive upload, which v4 only does with include-hidden-files.
+class WorkflowPatches extends Component {
+  postSynthesize() {
+    for (const file of ['build.yml', 'release.yml', 'upgrade-main.yml']) {
+      const filePath = path.join(this.project.outdir, '.github/workflows', file);
+      if (!fs.existsSync(filePath)) continue;
+      const content = fs
+        .readFileSync(filePath, 'utf8')
+        .replace(/actions\/upload-artifact@v2(\.1\.1)?/g, 'actions/upload-artifact@v4')
+        .replace(/actions\/download-artifact@v3/g, 'actions/download-artifact@v4')
+        .replace(
+          /(uses: actions\/upload-artifact@v4\n\s+with:\n\s+name: build-artifact\n\s+path: dist)/g,
+          '$1\n          include-hidden-files: true',
+        )
+        .replace(
+          '      - name: Push changes\n        run:',
+          '      - name: Push changes\n        env:\n          HEAD_REF: ${{ github.event.pull_request.head.ref }}\n        run:',
+        )
+        .replace('git push origin HEAD:${{ github.event.pull_request.head.ref }}', 'git push origin HEAD:"$HEAD_REF"');
+      fs.chmodSync(filePath, 0o644);
+      fs.writeFileSync(filePath, content);
+    }
+  }
+}
+new WorkflowPatches(project);
 
 project.gitignore.exclude('.env', '.idea');
 project.gitignore.exclude('example/*.js', 'example/*.d.ts');
